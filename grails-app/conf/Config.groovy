@@ -11,6 +11,8 @@
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
 
+grails.config.locations = ["file:/usr/local/etc/grails/${appName}.groovy"]
+
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false
@@ -94,3 +96,30 @@ grails.config.defaults.locations = [KickstartResources]
 
 // CAS Token authentication
 cas.token.key = [name: 'alphabet_key', data: 'abcdefghijklmnop']
+// Added by the Spring Security CAS (USF) plugin:
+grails.plugins.springsecurity.userLookup.userDomainClassName = 'edu.usf.cims.UsfCasUser'
+grails.plugins.springsecurity.cas.active = true
+grails.plugins.springsecurity.cas.sendRenew = false
+grails.plugins.springsecurity.cas.key = '36b54490b63b916b3b931c36295d5d2e' //unique value for each app
+grails.plugins.springsecurity.cas.artifactParameter = 'ticket'
+grails.plugins.springsecurity.cas.serviceParameter = 'service'
+grails.plugins.springsecurity.cas.filterProcessesUrl = '/j_spring_cas_security_check'
+grails.plugins.springsecurity.cas.proxyCallbackUrl = 'http://localhost:8080/ditto/secure/receptor' 
+grails.plugins.springsecurity.cas.proxyReceptorUrl = '/secure/receptor'
+grails.plugins.springsecurity.cas.useSingleSignout = false
+grails.plugins.springsecurity.cas.driftTolerance = 120000
+grails.plugins.springsecurity.cas.loginUri = '/login'
+grails.plugins.springsecurity.cas.useSamlValidator = true
+grails.plugins.springsecurity.cas.authorityAttribute = 'eduPersonEntitlement'
+grails.plugins.springsecurity.cas.serverUrlPrefix = 'https://authtest.it.usf.edu'
+grails.plugins.springsecurity.cas.serviceUrl = 'http://localhost:8080/ditto/j_spring_cas_security_check'
+
+/** SSL key & truststore configuration key */
+rest.https.truststore.path = 'resources/certs/rest_client_keystore.jks'
+rest.https.keystore.path='resources/certs/rest_client_keystore.jks'
+/** Certificate Hostname Verifier configuration key */
+rest.https.cert.hostnameVerifier = 'ALLOW_ALL'
+/** Enforce SSL Socket Factory */
+rest.https.sslSocketFactory.enforce = true
+
+directory.nams.search.url = ''
