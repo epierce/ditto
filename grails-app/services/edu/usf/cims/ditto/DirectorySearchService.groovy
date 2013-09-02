@@ -15,16 +15,28 @@ class DirectorySearchService {
     def searchNams() {
 
       def netid = 'epierce'
-      def result = withCasRest(   grailsApplication.config.directory.nams.search.url,
-                                    "GET",
-                                    grailsApplication.config.casRestClient.cas.username,
-                                    grailsApplication.config.casRestClient.cas.password,
-                                    [:],
-                                    [submit_type:"netid",return_type:"dir_entry",return:"json",value:netid])
-        
-        def jsonObj = new JsonSlurper().parseText(result)
-        def accounts = jsonObj.accounts
+      def result = withCasRest(
+          grailsApplication.config.directory.nams.search.url,
+          "GET",
+          grailsApplication.config.casRestClient.cas.username,
+          grailsApplication.config.casRestClient.cas.password,
+          [:],
+          [ submit_type:"netid", return_type:"dir_entry", return:"json", value:netid]
+      )
+      
+      def jsonObj = new JsonSlurper().parseText(result)
+      def dirEntry = jsonObj.dir_entry
 
-      return jsonObj
+      dirEntry.remove('userpassword')
+      dirEntry.remove('employeenumber')
+      dirEntry.remove('description')
+      dirEntry.remove('mailaccessdomain')
+      dirEntry.remove('emailforwardingaddress')
+      dirEntry.remove('objectclass')
+      dirEntry.remove('l')
+      dirEntry.remove('gecos')
+      dirEntry.remove('mailhost')
+
+      return dirEntry
     }
 }

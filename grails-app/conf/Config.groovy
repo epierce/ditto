@@ -94,8 +94,7 @@ log4j = {
 
 grails.config.defaults.locations = [KickstartResources]
 
-// CAS Token authentication
-cas.token.key = [name: 'alphabet_key', data: 'abcdefghijklmnop']
+
 // Added by the Spring Security CAS (USF) plugin:
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'edu.usf.cims.UsfCasUser'
 grails.plugins.springsecurity.cas.active = true
@@ -121,5 +120,3 @@ rest.https.keystore.path='resources/certs/rest_client_keystore.jks'
 rest.https.cert.hostnameVerifier = 'ALLOW_ALL'
 /** Enforce SSL Socket Factory */
 rest.https.sslSocketFactory.enforce = true
-
-directory.nams.search.url = ''

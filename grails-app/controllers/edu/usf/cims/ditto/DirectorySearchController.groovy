@@ -8,8 +8,8 @@ class DirectorySearchController {
   def directorySearchService
 
 	def index = { 
+    def directoryEntry = directorySearchService.searchNams()
 
-
-    render directorySearchService.searchNams() 
+    [dirEntry : directoryEntry] 
   }
 }
