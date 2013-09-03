@@ -120,3 +120,9 @@ rest.https.keystore.path='resources/certs/rest_client_keystore.jks'
 rest.https.cert.hostnameVerifier = 'ALLOW_ALL'
 /** Enforce SSL Socket Factory */
 rest.https.sslSocketFactory.enforce = true
+
+ditto.user.attributes = ['uid','usfeduprimarydepartment','usfeduprimarycollege','usfeduemplid','givenname','edupersonaffiliation','usfeducollege','telephonenumber',
+'uidnumber','namsid','title','usfedudepartment','usfeduhost','loginshell','homedirectory','mail','sn','physicaldeliveryofficename','usfeduaffiliation',
+'usfeduprimaryaffiliation','usfeduunumber','edupersonprimaryaffiliation','l','usfedumiddlename','usfeduprivacy','usfeducampus','gidnumber',
+'cn','edupersonentitlement','gecos']
+ditto.user.requiredAttributes = ['uid']
