@@ -113,6 +113,15 @@ grails.plugins.springsecurity.cas.authorityAttribute = 'eduPersonEntitlement'
 grails.plugins.springsecurity.cas.serverUrlPrefix = 'https://authtest.it.usf.edu'
 grails.plugins.springsecurity.cas.serviceUrl = 'http://localhost:8080/ditto/j_spring_cas_security_check'
 
+grails.plugins.springsecurity.securityConfigType = "InterceptUrlMap"
+grails.plugins.springsecurity.interceptUrlMap = [
+     '/js/**':        ['IS_AUTHENTICATED_ANONYMOUSLY'],
+     '/css/**':       ['IS_AUTHENTICATED_ANONYMOUSLY'],
+     '/images/**':    ['IS_AUTHENTICATED_ANONYMOUSLY'],
+     '/login/denied':     ['IS_AUTHENTICATED_ANONYMOUSLY'],
+     '/**':    ['ROLE_DITTOUSER', 'IS_AUTHENTICATED_FULLY']
+]
+
 /** SSL key & truststore configuration key */
 rest.https.truststore.path = 'resources/certs/rest_client_keystore.jks'
 rest.https.keystore.path='resources/certs/rest_client_keystore.jks'
@@ -121,8 +130,8 @@ rest.https.cert.hostnameVerifier = 'ALLOW_ALL'
 /** Enforce SSL Socket Factory */
 rest.https.sslSocketFactory.enforce = true
 
-ditto.user.attributes = ['uid','usfeduprimarydepartment','usfeduprimarycollege','usfeduemplid','givenname','edupersonaffiliation','usfeducollege','telephonenumber',
+ditto.user.attributes = ['usfeduprimarydepartment','usfeduprimarycollege','usfeduemplid','givenname','edupersonaffiliation','usfeducollege','telephonenumber',
 'uidnumber','namsid','title','usfedudepartment','usfeduhost','loginshell','homedirectory','mail','sn','physicaldeliveryofficename','usfeduaffiliation',
 'usfeduprimaryaffiliation','usfeduunumber','edupersonprimaryaffiliation','l','usfedumiddlename','usfeduprivacy','usfeducampus','gidnumber',
 'cn','edupersonentitlement','gecos']
-ditto.user.requiredAttributes = ['uid']
+ditto.user.usernameAttribute = 'uid'
