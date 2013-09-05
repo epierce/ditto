@@ -26,21 +26,25 @@ class TokenController {
       }
     }
 
-    // Get key data from Config.grovy
-    def key = grailsApplication.config.cas.token.key
-
+    
     def tokenData = [ 
           generated : new Date().time,
           credentials : credentials ]
 
     def jsonData = tokenData.encodeAsJSON()
 
-    def encrytedToken = Security.AESencrypt(jsonData, key.data)
+    // Get key data from Config.grovy
+    def key = grailsApplication.config.cas.token.key
+    if(key.data) {
+      def encrytedToken = Security.AESencrypt(jsonData, key.data)
 
-    def finalURL = "${casURL}/login?username=${credentials.username}&token_service=${key.name}&auth_token=${encrytedToken.encodeAsURL()}&service=https://dev.it.usf.edu/sync_test.php"
+      def finalURL = "${casURL}/login?username=${credentials.username}&token_service=${key.name}&auth_token=${encrytedToken.encodeAsURL()}&service=https://dev.it.usf.edu/sync_test.php"
 
-    // Send the data to the generateToken view
-    [jsonData: jsonData, encrytedToken: encrytedToken, finalURL: finalURL]
+      // Send the data to the generateToken view
+      return [jsonData: jsonData, encrytedToken: encrytedToken, finalURL: finalURL]
+    } else {
+      render 'key error!'
+    }
 
   }
 }

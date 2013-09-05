@@ -5,11 +5,15 @@ package edu.usf.cims.ditto
  */
 class PersonSearchController {
   def personSearchService
+  def usfCasService
 
 	def index = { 
+
     def identifier = params['identifier'] ?: ''
     def searchTerm = params['searchTerm'] ?: ''
+    
     def directoryEntry = personSearchService.findPersonByIdentifer(identifier, searchTerm)
-    [dirEntry : directoryEntry] 
+    
+    [result : directoryEntry] 
   }
 }
