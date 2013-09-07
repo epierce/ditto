@@ -12,6 +12,10 @@ class TokenController {
 
   def generateToken() { 
 
+    def debug = false
+    if(params.debug == 'TRUE') debug = true
+    params.remove('debug')
+
     def casURL = 'https://watson.it.usf.edu:8443'
   
     //We,don't need the controller/action paramers
@@ -26,7 +30,6 @@ class TokenController {
       }
     }
 
-    
     def tokenData = [ 
           generated : new Date().time,
           credentials : credentials ]
@@ -41,7 +44,11 @@ class TokenController {
       def finalURL = "${casURL}/login?username=${credentials.username}&token_service=${key.name}&auth_token=${encrytedToken.encodeAsURL()}&service=https://dev.it.usf.edu/sync_test.php"
 
       // Send the data to the generateToken view
-      return [jsonData: jsonData, encrytedToken: encrytedToken, finalURL: finalURL]
+      if(debug){
+        return [jsonData: jsonData, encrytedToken: encrytedToken, finalURL: finalURL]
+      } else {
+        redirect(url: finalURL)
+      }
     } else {
       render 'key error!'
     }
