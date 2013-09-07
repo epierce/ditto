@@ -50,13 +50,6 @@
           <g:link controller="personSearch" class="btn btn-primary btn-block">Set Attributes</g:link>
       </div>
     </div>
-
-                        <li><h1>SpringSecurity Granted Authorities</h1> 
-                          <ul>
-                            <g:each var="i" in="${request.userPrincipal.authorities}" >
-                              <li>${i}</li>
-                            </g:each>
-                          </ul>
   </body>
 
 </html>
