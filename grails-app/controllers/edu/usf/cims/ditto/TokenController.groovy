@@ -1,6 +1,6 @@
 package edu.usf.cims.ditto
 
-import edu.usf.cims.Security
+
 import org.codehaus.groovy.grails.commons.GrailsApplication
 
 /**
@@ -9,49 +9,25 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
  */
 class TokenController {
   def grailsApplication
+  def tokenService
 
-  def generateToken() { 
+  def generateTokenDev() { 
 
     def debug = false
     if(params.debug == 'TRUE') debug = true
-    params.remove('debug')
+    
+    def casURL = grailsApplication.config.ditto.cas.loginUrls.dev
+    def key = grailsApplication.config.ditto.cas.token.keys.dev
 
-    def casURL = 'https://watson.it.usf.edu:8443'
-  
-    //We,don't need the controller/action paramers
-    params.remove('controller')
-    params.remove('action')
+    def tokenData = tokenService.generateToken(params,key.value)
 
-    //Loop through the other parameters and copy the ones with values to a new HashMap
-    def credentials = [:]
-    params.each() { attribute, value ->
-      if(value){
-        credentials.put(attribute,value)
-      }
-    }
+    def finalURL = "" //"${casURL}/login?username=${credentials.username}&token_service=${key.name}&auth_token=${encrytedToken.encodeAsURL()}&service=https://dev.it.usf.edu/sync_test.php"
 
-    def tokenData = [ 
-          generated : new Date().time,
-          credentials : credentials ]
-
-    def jsonData = tokenData.encodeAsJSON()
-
-    // Get key data from Config.grovy
-    def key = grailsApplication.config.cas.token.key
-    if(key.data) {
-      def encrytedToken = Security.AESencrypt(jsonData, key.data)
-
-      def finalURL = "${casURL}/login?username=${credentials.username}&token_service=${key.name}&auth_token=${encrytedToken.encodeAsURL()}&service=https://dev.it.usf.edu/sync_test.php"
-
-      // Send the data to the generateToken view
-      if(debug){
-        return [jsonData: jsonData, encrytedToken: encrytedToken, finalURL: finalURL]
-      } else {
-        redirect(url: finalURL)
-      }
+    // Send the data to the generateToken view
+    if(debug){
+      return [jsonData: tokenData.json, encrytedToken: tokenData.final, finalURL: finalURL]
     } else {
-      render 'key error!'
+      redirect(url: finalURL)
     }
-
   }
 }

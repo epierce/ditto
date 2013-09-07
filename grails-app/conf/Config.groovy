@@ -118,8 +118,8 @@ grails.plugins.springsecurity.interceptUrlMap = [
      '/js/**':        ['IS_AUTHENTICATED_ANONYMOUSLY'],
      '/css/**':       ['IS_AUTHENTICATED_ANONYMOUSLY'],
      '/images/**':    ['IS_AUTHENTICATED_ANONYMOUSLY'],
-     '/login/denied':     ['IS_AUTHENTICATED_ANONYMOUSLY'],
-     '/**':    ['ROLE_DITTOUSER', 'IS_AUTHENTICATED_FULLY']
+     '/login/denied': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+     '/**':           ['ROLE_DITTOUSER', 'IS_AUTHENTICATED_FULLY']
 ]
 
 /** SSL key & truststore configuration key */
@@ -135,3 +135,4 @@ ditto.user.attributes = ['usfeduprimarydepartment','usfeduprimarycollege','usfed
 'usfeduprimaryaffiliation','usfeduunumber','edupersonprimaryaffiliation','l','usfedumiddlename','usfeduprivacy','usfeducampus','gidnumber',
 'cn','edupersonentitlement','gecos']
 ditto.user.usernameAttribute = 'uid'
+ditto.roles.admin = [ preprod:'ROLE_TEST', production:'ROLE_ADMIN']

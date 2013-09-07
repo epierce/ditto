@@ -10,7 +10,7 @@
   </div>
   <g:if test="${result.result == 'success'}">
     <legend>User attributes</legend>
-    <g:form name="tokenForm" controller="token" action="generateToken">
+    <g:form name="tokenForm" id="tokenForm" controller="token" action="generateTokenDev">
       <div class="well">     
         <fieldset>
           <div class="control-group" id="uid-group">
@@ -53,16 +53,43 @@
               <br>
             </div>
           </g:each>
-          <button id="submitButton" name="submitButton" class="btn btn-primary btn-large" type="submit">Copy User</button>
+          <p>
+            <h4><input type="checkbox" name="debug" value="TRUE"> View token contents before sending to CAS</h4>
+            <br>
+          </p>
+          <p>
+            <button id="submitButton" name="submitButton" class="btn btn-primary btn-large btn-block" type="submit">Login to Development CAS Server</button>
+          </p>
+          <sec:ifAllGranted roles="${grailsApplication.config.ditto.roles.admin.test}">
+            <p>
+              <button id="submitButtonTest" name="submitButton" class="btn btn-warning btn-large btn-block" type="submit">Login to Pre-Production CAS Server</button>
+            </p>
+            <script>
+              $("#submitButtonTest").click(function() {
+                $("#tokenForm").attr("action", "<g:createLink controller="token" action="generateTokenTest" />");
+                $("#tokenForm").submit();
+              });
+            </script>
+          </sec:ifAllGranted>
+          <sec:ifAllGranted roles="${grailsApplication.config.ditto.roles.admin.production}">
+            <p>
+              <button id="submitButtonProd" name="submitButton" class="btn btn-danger btn-large btn-block" type="button">Login to Production CAS Server</button>
+            </p>
+            <script>
+              $("#submitButtonProd").click(function() {
+                $("#tokenForm").attr("action", "<g:createLink controller="token" action="generateTokenProd" />");
+                $("#tokenForm").submit();
+              });
+            </script>
+          </sec:ifAllGranted>
         </fieldset>     
       </div>
     </g:form>
   </g:if>
-  <!-- Handle errors -->
   <g:else>
     <div class="hero-unit">
       <h2>There was a problem!</h1>
-      <p>The server said: "${result.reason}"</p>
+      <p>The server said: "${result.details}"</p>
       <g:link controller="home" class="btn btn-primary"><i class="icon-chevron-left icon-white"></i> Return to search</g:link>
     </div>
   </g:else>
