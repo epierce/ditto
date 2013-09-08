@@ -72,24 +72,35 @@ environments {
 }
 
 // log4j configuration
-log4j = {
-    // Example of changing the log pattern for the default console appender:
-    //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
+def catalinaBase = System.properties.getProperty('catalina.base')
+if (!catalinaBase) catalinaBase = '.'   // just in case
+def logDirectory = "${catalinaBase}/logs"
 
-    error  'org.codehaus.groovy.grails.web.servlet',        // controllers
-           'org.codehaus.groovy.grails.web.pages',          // GSP
-           'org.codehaus.groovy.grails.web.sitemesh',       // layouts
+log4j = { root ->
+     appenders {
+             rollingFile name:'stdout', file:"${logDirectory}/ditto.log".toString(), maxFileSize:'100MB'
+             rollingFile name:'stacktrace', file:"${logDirectory}/ditto_stack.log".toString(), maxFileSize:'100MB'
+    }
+
+    error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
+           'org.codehaus.groovy.grails.web.pages', //  GSP
+           'org.codehaus.groovy.grails.web.sitemesh', //  layouts
            'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
-           'org.codehaus.groovy.grails.web.mapping',        // URL mapping
-           'org.codehaus.groovy.grails.commons',            // core / classloading
-           'org.codehaus.groovy.grails.plugins',            // plugins
-           'org.codehaus.groovy.grails.orm.hibernate',      // hibernate integration
+           'org.codehaus.groovy.grails.web.mapping', // URL mapping
+           'org.codehaus.groovy.grails.commons', // core / classloading
+           'org.codehaus.groovy.grails.plugins', // plugins
            'org.springframework',
-           'org.hibernate',
-           'net.sf.ehcache.hibernate'
+           'groovyx.net.http.RESTClient',
+           'grails.util.GrailsUtil',
+           'groovyx.net.http.ParserRegistry',
+           'grails.app'
+
+    info   'grails.app.controllers'
+
+    debug  'grails.app.controllers.edu.usf.cims.ditto.TokenController',
+           'grails.app.controllers.edu.usf.cims.ditto.PersonSearchController'
+
+    root.level = org.apache.log4j.Level.INFO
 }
 
 grails.config.defaults.locations = [KickstartResources]

@@ -7,6 +7,7 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
  *
  */
 class TokenController {
+  def usfCasService
   def grailsApplication
   def tokenService
 
@@ -22,6 +23,9 @@ class TokenController {
 
     def tokenData = tokenService.generateToken(params,key.value)
 
+    log.info "Auth Token created in CAS instance [${instance}] for [${params.username}] by [${usfCasService.username}]"
+    log.debug "JSON data created for user [${usfCasService.username}]: ${tokenData.json}"
+
     def model = [ jsonData: tokenData.json, 
                   authToken: tokenData.final, 
                   casURL: casURL,
@@ -31,8 +35,10 @@ class TokenController {
 
     // Send the data to the generateToken view
     if(debug){
+      log.debug "Displaying token data for [${params.username}]"
       render(view: "viewToken", model: model)
     } else {
+      log.debug "Sending token data for [${params.username}] to CAS Instance [${instance}]"
       render(view: "sendToken", model: model)
     }
   }
