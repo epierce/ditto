@@ -1,6 +1,5 @@
 package edu.usf.cims.ditto
 
-
 import org.codehaus.groovy.grails.commons.GrailsApplication
 
 /**
@@ -11,23 +10,30 @@ class TokenController {
   def grailsApplication
   def tokenService
 
-  def generateTokenDev() { 
+  def generateToken() { 
 
     def debug = false
     if(params.debug == 'TRUE') debug = true
     
-    def casURL = grailsApplication.config.ditto.cas.loginUrls.dev
-    def key = grailsApplication.config.ditto.cas.token.keys.dev
+    def instance = params.id
+    def casURL = grailsApplication.config.ditto.cas.loginUrls["$instance"]
+    def casService = grailsApplication.config.ditto.cas.serviceUrls["$instance"]
+    def key = grailsApplication.config.ditto.cas.token.keys["$instance"]
 
     def tokenData = tokenService.generateToken(params,key.value)
 
-    def finalURL = "" //"${casURL}/login?username=${credentials.username}&token_service=${key.name}&auth_token=${encrytedToken.encodeAsURL()}&service=https://dev.it.usf.edu/sync_test.php"
+    def model = [ jsonData: tokenData.json, 
+                  authToken: tokenData.final, 
+                  casURL: casURL,
+                  username: params.username,
+                  tokenService: key.name,
+                  service: casService ]
 
     // Send the data to the generateToken view
     if(debug){
-      return [jsonData: tokenData.json, encrytedToken: tokenData.final, finalURL: finalURL]
+      render(view: "viewToken", model: model)
     } else {
-      redirect(url: finalURL)
+      render(view: "sendToken", model: model)
     }
   }
 }

@@ -10,7 +10,7 @@
   </div>
   <g:if test="${result.result == 'success'}">
     <legend>User attributes</legend>
-    <g:form name="tokenForm" id="tokenForm" controller="token" action="generateTokenDev">
+    <g:form name="tokenForm" controller="token" action="generateToken" id="dev" useToken="false">
       <div class="well">     
         <fieldset>
           <div class="control-group" id="uid-group">
@@ -58,15 +58,21 @@
             <br>
           </p>
           <p>
-            <button id="submitButton" name="submitButton" class="btn btn-primary btn-large btn-block" type="submit">Login to Development CAS Server</button>
+            <button id="submitButtonDev" name="submitButton" class="btn btn-primary btn-large btn-block" type="button">Login to Development CAS Server</button>
+            <script>
+              $("#submitButtonDev").click(function() {
+                $("#tokenForm").attr("action", "<g:createLink controller="token" action="generateToken" id="dev" />");
+                $("#tokenForm").submit();
+              });
+            </script>
           </p>
           <sec:ifAllGranted roles="${grailsApplication.config.ditto.roles.admin.test}">
             <p>
-              <button id="submitButtonTest" name="submitButton" class="btn btn-warning btn-large btn-block" type="submit">Login to Pre-Production CAS Server</button>
+              <button id="submitButtonTest" name="submitButton" class="btn btn-warning btn-large btn-block" type="button">Login to Pre-Production CAS Server</button>
             </p>
             <script>
               $("#submitButtonTest").click(function() {
-                $("#tokenForm").attr("action", "<g:createLink controller="token" action="generateTokenTest" />");
+                $("#tokenForm").attr("action", "<g:createLink controller="token" action="generateToken" id="test" />");
                 $("#tokenForm").submit();
               });
             </script>
@@ -77,7 +83,7 @@
             </p>
             <script>
               $("#submitButtonProd").click(function() {
-                $("#tokenForm").attr("action", "<g:createLink controller="token" action="generateTokenProd" />");
+                $("#tokenForm").attr("action", "<g:createLink controller="token" action="generateToken" id="production" />");
                 $("#tokenForm").submit();
               });
             </script>
