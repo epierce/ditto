@@ -13,6 +13,7 @@ class TokenService {
       params.remove('debug')
       params.remove('controller')
       params.remove('action')
+      params.remove('id')
 
       //Loop through the other parameters and copy the ones with values to a new HashMap
       def credentials = [:]
@@ -24,8 +25,8 @@ class TokenService {
 
       def tokenData = [generated : new Date().time, credentials : credentials]
       def jsonData = tokenData.encodeAsJSON()      
-      def encrytedToken = Security.AESencrypt(jsonData, key)
+      def encryptedToken = Security.AESencrypt(jsonData, key)
 
-      return [json: jsonData, final: encrytedToken]
+      return [json: jsonData, final: encryptedToken]
     }
 }
