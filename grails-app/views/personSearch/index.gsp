@@ -10,7 +10,7 @@
   </div>
   <g:if test="${result.result == 'success'}">
     <legend>User attributes</legend>
-    <g:form name="tokenForm" controller="token" action="generateToken" id="dev" useToken="false">
+    <g:form name="tokenForm" controller="token" action="generateToken" id="dev" useToken="true">
       <div class="well">     
         <fieldset>
           <div class="control-group" id="uid-group">
