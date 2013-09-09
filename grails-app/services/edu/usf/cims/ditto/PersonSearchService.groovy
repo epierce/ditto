@@ -9,6 +9,8 @@ import grails.converters.JSON
 class PersonSearchService {
     def grailsApplication
 
+    static transactional = false
+
     java.util.HashMap findPersonByIdentifer(String identifier, String searchTerm) {
 
       //Create an empty result set
