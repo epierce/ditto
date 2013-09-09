@@ -13,8 +13,8 @@ class PersonSearchController {
     def searchTerm = params['searchTerm'] ?: ''
     
     def directoryEntry = personSearchService.findPersonByIdentifer(identifier, searchTerm)
-    log.info "CAS Login by ${usfCasService.username}"
-    log.debug "PersonSearch: searchTerm [${searchTerm}] identifier [${identifier}]"
+    log.info "CAS Login by [${usfCasService.username}] from [${request.getRemoteAddr()}]"
+    log.debug "User: [${usfCasService.username}] IP: [${request.getRemoteAddr()}] PersonSearch: searchTerm [${searchTerm}] identifier [${identifier}]"
     
     [result : directoryEntry] 
   }

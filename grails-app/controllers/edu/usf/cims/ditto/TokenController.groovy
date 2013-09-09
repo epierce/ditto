@@ -23,7 +23,7 @@ class TokenController {
 
     def tokenData = tokenService.generateToken(params,key.value)
 
-    log.info "Auth Token created in CAS instance [${instance}] for [${params.username}] by [${usfCasService.username}]"
+    log.info "Authentication Token created in CAS environment [${instance}] for [${params.username}] by [${usfCasService.username}] from [${request.getRemoteAddr()}]"
     log.debug "JSON data created for user [${usfCasService.username}]: ${tokenData.json}"
 
     def model = [ jsonData: tokenData.json, 
@@ -32,6 +32,25 @@ class TokenController {
                   username: params.username,
                   tokenService: key.name,
                   service: casService ]
+
+    if (grailsApplication.config.ditto.notification.lists["$instance"]) {
+        sendMail {
+            to grailsApplication.config.ditto.notification.lists["$instance"]
+            subject "[Ditto Alert] Authentication token created for ${instance} CAS environment"
+            text (
+"""Ditto audit record
+=============================================================
+ACTOR: ${usfCasService.username}
+ACTION: Authentication token created
+TARGET: ${params.username}
+ENVIRONMENT: ${instance} 
+WHEN: ${new Date().format("E, dd MMM yyyy HH:mm:ss Z")}
+CLIENT IP ADDRESS: ${request.getRemoteAddr()}
+SERVER IP ADDRESS: ${request.getLocalAddr()}
+=============================================================
+""")
+      }
+    }
 
     // Send the data to the generateToken view
     if(debug){

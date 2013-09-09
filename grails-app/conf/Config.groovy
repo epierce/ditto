@@ -141,9 +141,10 @@ rest.https.cert.hostnameVerifier = 'ALLOW_ALL'
 /** Enforce SSL Socket Factory */
 rest.https.sslSocketFactory.enforce = true
 
-ditto.user.attributes = ['usfeduprimarydepartment','usfeduprimarycollege','usfeduemplid','givenname','edupersonaffiliation','usfeducollege','telephonenumber',
-'uidnumber','namsid','title','usfedudepartment','usfeduhost','loginshell','homedirectory','mail','sn','physicaldeliveryofficename','usfeduaffiliation',
-'usfeduprimaryaffiliation','usfeduunumber','edupersonprimaryaffiliation','l','usfedumiddlename','usfeduprivacy','usfeducampus','gidnumber',
-'cn','edupersonentitlement','gecos']
+ditto.user.attributes = ["cn","edupersonaffiliation","edupersonentitlement","edupersonprimaryaffiliation","gidnumber","givenname","homedirectory",
+      "loginshell","mail","namsid","physicaldeliveryofficename","sn","telephonenumber","title","uid","uidnumber","usfeduaffiliation",
+      "usfeducampus","usfeducollege","usfedudepartment","usfeduemplid","usfeduhost","usfedumiddlename","usfeduprimaryaffiliation",
+      "usfeduprimarycollege","usfeduprimarydepartment","usfeduprivacy","usfeduunumber"]
+
 ditto.user.usernameAttribute = 'uid'
 ditto.roles.admin = [ preprod:'ROLE_TEST', production:'ROLE_ADMIN']
