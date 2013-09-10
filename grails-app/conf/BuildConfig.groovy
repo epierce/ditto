@@ -40,10 +40,11 @@ grails.project.dependency.resolution = {
         runtime ":resources:1.1.6"
 
         compile ":lesscss-resources:1.3.3"
+        compile ":font-awesome-resources:3.2.1.2"
         compile ":kickstart-with-bootstrap:0.9.6"
         compile ":spring-security-core:1.2.7.3"
-        compile ":spring-security-cas-usf:1.2.0"
-        compile ":cas-rest-client:0.3"
+        compile ":spring-security-cas-usf:1.3.0"
+        compile ":cas-rest-client:0.3.1"
         compile ":rest:0.7"
         compile ":mail:1.0.1"
 
