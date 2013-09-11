@@ -1,12 +1,3 @@
-// locations to search for config files that get merged into the main config;
-// config files can be ConfigSlurper scripts, Java properties files, or classes
-// in the classpath in ConfigSlurper format
-
-// grails.config.locations = [ "classpath:${appName}-config.properties",
-//                             "classpath:${appName}-config.groovy",
-//                             "file:${userHome}/.grails/${appName}-config.properties",
-//                             "file:${userHome}/.grails/${appName}-config.groovy"]
-
 // if (System.properties["${appName}.config.location"]) {
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
@@ -30,9 +21,6 @@ grails.mime.types = [
     text:          'text/plain',
     xml:           ['text/xml', 'application/xml']
 ]
-
-// URL Mapping Cache Max Size, defaults to 5000
-//grails.urlmapping.cache.maxsize = 1000
 
 // What URL patterns should be processed by the resources plugin
 grails.resources.adhoc.patterns = ['/images/*', '/css/*', '/js/*', '/plugins/*']
@@ -105,8 +93,34 @@ log4j = { root ->
 
 grails.config.defaults.locations = [KickstartResources]
 
+//Attributes to copy
+ditto.user.attributes = ["cn","edupersonaffiliation","edupersonentitlement","edupersonprimaryaffiliation","gidnumber",
+      "givenname","homedirectory","loginshell","mail","namsid","physicaldeliveryofficename","sn","telephonenumber","title",
+      "uid","uidnumber","usfeduaffiliation","usfeducampus","usfeducollege","usfedudepartment","usfeduemplid","usfeduhost",
+      "usfedumiddlename","usfeduprimaryaffiliation","usfeduprimarycollege","usfeduprimarydepartment","usfeduprivacy",
+      "usfeduunumber"]
+ditto.user.usernameAttribute = 'uid'
 
-// Added by the Spring Security CAS (USF) plugin:
+//Keys to encypt the tokens with
+ditto.cas.token.keys = [
+  dev: [name: 'ditto', value:'1234567890123456'],
+  test: [name: 'ditto', value:'ABCDEFGHIJKLMNOP'],
+  production: [name: 'ditto', value:'PhefraTusUh3kABR']
+]
+//CAS server to send the token to
+ditto.cas.loginUrls = [
+  dev:'https://dev_cas.example.edu/cas',
+  test:'https://test_cas.example.com/cas',
+  production:'https://cas_server.example.edu/cas'
+]
+//URL that the user should be sent to after CAS validates the token
+ditto.cas.serviceUrls = [
+  dev:'https://www-dev.example.edu/myService',
+  test:'https://www-test.example.edu/myService',
+  production:'https://www.example.edu/myService'
+]
+
+// spring-security-cas-usf settings
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'edu.usf.cims.UsfCasUser'
 grails.plugins.springsecurity.cas.active = true
 grails.plugins.springsecurity.cas.sendRenew = false
@@ -124,27 +138,61 @@ grails.plugins.springsecurity.cas.authorityAttribute = 'eduPersonEntitlement'
 grails.plugins.springsecurity.cas.serverUrlPrefix = 'https://authtest.it.usf.edu'
 grails.plugins.springsecurity.cas.serviceUrl = 'http://localhost:8080/ditto/j_spring_cas_security_check'
 
-grails.plugins.springsecurity.securityConfigType = "InterceptUrlMap"
-grails.plugins.springsecurity.interceptUrlMap = [
-     '/js/**':        ['IS_AUTHENTICATED_ANONYMOUSLY'],
-     '/css/**':       ['IS_AUTHENTICATED_ANONYMOUSLY'],
-     '/images/**':    ['IS_AUTHENTICATED_ANONYMOUSLY'],
-     '/login/denied': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-     '/**':           ['ROLE_DITTOUSER', 'IS_AUTHENTICATED_FULLY']
+/** Access Control via Spring Security Roles **/
+ditto.roles.user = 'ROLE_DITTOUSER'
+ditto.roles.admin = [ 
+  dev:'ROLE_DITTO_DEV',
+  test:'ROLE_DITTO_TEST', 
+  production:'ROLE_DITTO_PROD'
 ]
 
-/** SSL key & truststore configuration key */
+grails.plugins.springsecurity.securityConfigType = "InterceptUrlMap"
+grails.plugins.springsecurity.interceptUrlMap = [
+  '/login/denied': ['IS_AUTHENTICATED_ANONYMOUSLY'], //Anyone can get to the error page
+  '/token/generateToken/dev':   [ditto.roles.user, ditto.roles.admin.dev, 'IS_AUTHENTICATED_FULLY'],
+  '/token/generateToken/test':   [ditto.roles.user, ditto.roles.admin.test, 'IS_AUTHENTICATED_FULLY'],
+  '/token/generateToken/production':   [ditto.roles.user, ditto.roles.admin.production, 'IS_AUTHENTICATED_FULLY'],
+  '/**':           [ditto.roles.user, 'IS_AUTHENTICATED_FULLY']
+]
+
+/** RESTful CAS client configuration*/
 rest.https.truststore.path = 'resources/certs/rest_client_keystore.jks'
 rest.https.keystore.path='resources/certs/rest_client_keystore.jks'
 /** Certificate Hostname Verifier configuration key */
 rest.https.cert.hostnameVerifier = 'ALLOW_ALL'
 /** Enforce SSL Socket Factory */
 rest.https.sslSocketFactory.enforce = true
+/** CAS server that autheticates the webservice **/
+casRestClient.cas.server = "https://authtest.it.usf.edu"
+casRestClient.cas.ticketsPath = "/v1/tickets"        
+/** Username/password to use when accessing webservice **/
+casRestClient.cas.username = "user"    
+casRestClient.cas.password = "secret"
+/** URL of the Webservice to call**/
+directory.nams.search.url = "https://dev.it.usf.edu/vip/services/ws_convert"
 
-ditto.user.attributes = ["cn","edupersonaffiliation","edupersonentitlement","edupersonprimaryaffiliation","gidnumber","givenname","homedirectory",
-      "loginshell","mail","namsid","physicaldeliveryofficename","sn","telephonenumber","title","uid","uidnumber","usfeduaffiliation",
-      "usfeducampus","usfeducollege","usfedudepartment","usfeduemplid","usfeduhost","usfedumiddlename","usfeduprimaryaffiliation",
-      "usfeduprimarycollege","usfeduprimarydepartment","usfeduprivacy","usfeduunumber"]
+/** Email Notifications **/
+//Send notifications to these addresses
+ditto.notification.lists = [
+  dev:[],
+  test:['ditto-audit@example.edu'],
+  production:['ditto-audit@example.edu', 'security-admin@example.edu']
+]
 
-ditto.user.usernameAttribute = 'uid'
-ditto.roles.admin = [ preprod:'ROLE_TEST', production:'ROLE_ADMIN']
+//Send notifcations from this address
+grails.mail.default.from = "ditto_admin@example.edu"
+
+//Send mail using this connection
+grails {
+  mail {
+   host = "smtp.gmail.com"
+   port = 465
+   username = "user@gmail.com"
+   password = "secret"
+   props = ["mail.smtp.auth":"true",
+            "mail.smtp.socketFactory.port":"465",
+            "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+            "mail.smtp.socketFactory.fallback":"false"]
+  }
+}
+
