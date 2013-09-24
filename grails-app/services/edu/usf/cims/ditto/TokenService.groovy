@@ -26,12 +26,28 @@ class TokenService {
         if(value){
           credentials.put(attribute,value)
         }
-      }
+      } 
 
-      def tokenData = [generated : new Date().time, credentials : credentials]
+      def tokenData = [generated : new Date().time, credentials : mapAttributes(credentials)]
       def jsonData = tokenData.encodeAsJSON()      
       def encryptedToken = Security.AESencrypt(jsonData, key)
 
       return [json: jsonData, final: encryptedToken]
+    }
+
+    private def mapAttributes(inputAttributes){
+      //if the attribute mapping doesn't exist, just return the List
+      if(! grailsApplication.config.ditto.user.attributeMapping ) return inputAttributes
+
+      def outputAttributes = [:]
+      inputAttributes.each() { attribute, value ->
+        if(grailsApplication.config.ditto.user.attributeMapping[attribute]){
+          outputAttributes.put(grailsApplication.config.ditto.user.attributeMapping[attribute], value)
+        } else {
+          outputAttributes.put(attribute, value)
+        }
+      }
+
+      return outputAttributes
     }
 }

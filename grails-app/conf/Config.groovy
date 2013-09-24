@@ -93,13 +93,36 @@ log4j = { root ->
 
 grails.config.defaults.locations = [KickstartResources]
 
+ditto.user.usernameAttribute = 'uid'
 //Attributes to copy
-ditto.user.attributes = ["cn","edupersonaffiliation","edupersonentitlement","edupersonprimaryaffiliation","gidnumber",
-      "givenname","homedirectory","loginshell","mail","namsid","physicaldeliveryofficename","sn","telephonenumber","title",
-      "uid","uidnumber","usfeduaffiliation","usfeducampus","usfeducollege","usfedudepartment","usfeduemplid","usfeduhost",
+ditto.user.attributes = ["cn","edupersonaffiliation","edupersonentitlement","edupersonprimaryaffiliation",
+      "givenname","mail","namsid","physicaldeliveryofficename","sn","telephonenumber","title",
+      "uid","usfeduaffiliation","usfeducampus","usfeducollege","usfedudepartment","usfeduemplid","usfeduhost",
       "usfedumiddlename","usfeduprimaryaffiliation","usfeduprimarycollege","usfeduprimarydepartment","usfeduprivacy",
       "usfeduunumber"]
-ditto.user.usernameAttribute = 'uid'
+//Map attribute name to CAS attributes
+ditto.user.attributeMapping = [
+      "cn":"CommonName", 
+      "edupersonaffiliation":"eduPersonAffiliation",
+      "edupersonentitlement":"eduPersonEntitlement",
+      "edupersonprimaryaffiliation":"eduPersonPrimaryAffiliation",
+      "givenname":"GivenName",
+      "physicaldeliveryofficename":"MailStop",
+      "sn":"Surname",
+      "telephonenumber":"Phone",
+      "title":"Title",
+      "usfeduaffiliation":"USFeduAffiliation",
+      "usfeducampus":"USFeduCampus",
+      "usfeducollege":"USFeduCollege",
+      "usfedudepartment":"USFeduDepartment",
+      "usfeduemplid":"USFeduEmplid",
+      "usfeduhost":"USFeduHost",
+      "usfedumiddlename":"USFeduMiddlename",
+      "usfeduprimaryaffiliation":"USFeduPrimaryAffiliation",
+      "usfeduprimarycollege":"USFeduPrimaryCollege",
+      "usfeduprimarydepartment":"USFeduPrimaryDepartment",
+      "usfeduprivacy":"USFeduPrivacy"
+]
 
 //Keys to encypt the tokens with
 ditto.cas.token.keys = [
@@ -161,7 +184,7 @@ rest.https.keystore.path='resources/certs/rest_client_keystore.jks'
 /** Certificate Hostname Verifier configuration key */
 rest.https.cert.hostnameVerifier = 'ALLOW_ALL'
 /** Enforce SSL Socket Factory */
-rest.https.sslSocketFactory.enforce = true
+//rest.https.sslSocketFactory.enforce = true
 /** CAS server that autheticates the webservice **/
 casRestClient.cas.server = "https://authtest.it.usf.edu"
 casRestClient.cas.ticketsPath = "/v1/tickets"        
