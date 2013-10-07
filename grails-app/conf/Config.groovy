@@ -206,6 +206,7 @@ ditto.notification.lists = [
 grails.mail.default.from = "ditto_admin@example.edu"
 
 //Send mail using this connection
+/*
 grails {
   mail {
    host = "smtp.gmail.com"
@@ -218,4 +219,4 @@ grails {
             "mail.smtp.socketFactory.fallback":"false"]
   }
 }
-
+*/
