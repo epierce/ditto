@@ -24,12 +24,6 @@
 					<g:message code="error.403.message"/>
 				</p>
 				
-				<div class="actions">
-					<a href="${createLink(uri: '/')}" class="btn btn-large btn-primary">
-						<i class="icon-chevron-left icon-white"></i>
-						<g:message code="error.button.backToHome"/>
-					</a>			
-				</div>
 			</div>
 		</div>
 	</section>
