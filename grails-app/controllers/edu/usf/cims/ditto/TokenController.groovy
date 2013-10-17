@@ -15,6 +15,10 @@ class TokenController {
 
     def debug = false
     if(params.debug == 'TRUE') debug = true
+
+    if(! params.username){
+      redirect(action:'error', params:[reason: "Username is required"])
+    }
     
     def instance = params.id
     def casURL = grailsApplication.config.ditto.cas.loginUrls["$instance"]
@@ -60,5 +64,9 @@ SERVER IP ADDRESS: ${request.getLocalAddr()}
       log.debug "Sending token data for [${params.username}] to CAS Instance [${instance}]"
       render(view: "sendToken", model: model)
     }
+  }
+
+  def error(){
+    [reason: params.reason]
   }
 }
