@@ -18,6 +18,7 @@ class TokenController {
 
     if(! params.username){
       redirect(action:'error', params:[reason: "Username is required"])
+      return
     }
     
     def instance = params.id
