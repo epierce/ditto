@@ -11,7 +11,7 @@ class TokenController {
   def grailsApplication
   def tokenService
 
-  def generateToken() { 
+  def generateToken() {
 
     def debug = false
     if(params.debug == 'TRUE') debug = true
@@ -20,7 +20,7 @@ class TokenController {
       redirect(action:'error', params:[reason: "Username is required"])
       return
     }
-    
+
     def instance = params.id
     def casURL = grailsApplication.config.ditto.cas.loginUrls["$instance"]
     def casService = grailsApplication.config.ditto.cas.serviceUrls["$instance"]
@@ -31,8 +31,8 @@ class TokenController {
     log.info "Authentication Token created in CAS environment [${instance}] for [${params.username}] by [${usfCasService.username}] from [${request.getRemoteAddr()}]"
     log.debug "JSON data created for user [${usfCasService.username}]: ${tokenData.json}"
 
-    def model = [ jsonData: tokenData.json, 
-                  authToken: tokenData.final, 
+    def model = [ jsonData: tokenData.json,
+                  authToken: tokenData.final,
                   casURL: casURL,
                   username: params.username,
                   tokenService: key.name,
@@ -48,7 +48,7 @@ class TokenController {
 ACTOR: ${usfCasService.username}
 ACTION: Authentication token created
 TARGET: ${params.username}
-ENVIRONMENT: ${instance} 
+ENVIRONMENT: ${instance}
 WHEN: ${new Date().format("E, dd MMM yyyy HH:mm:ss Z")}
 CLIENT IP ADDRESS: ${request.getRemoteAddr()}
 SERVER IP ADDRESS: ${request.getLocalAddr()}
