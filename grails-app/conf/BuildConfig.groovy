@@ -1,4 +1,4 @@
-grails.servlet.version = "3.0" // Change depending on target container compliance (2.5 or 3.0)
+grails.servlet.version = "3.0"
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
@@ -6,33 +6,36 @@ grails.project.target.level = 1.6
 grails.project.source.level = 1.6
 grails.project.war.file = "target/${appName}.war"
 
-// uncomment (and adjust settings) to fork the JVM to isolate classpaths
-//grails.project.fork = [
-//   run: [maxMemory:1024, minMemory:64, debug:false, maxPerm:256]
-//]
-
 grails.project.dependency.resolution = {
-    // inherit Grails' default dependencies
-    inherits("global") {
-        // specify dependency exclusions here; for example, uncomment this to disable ehcache:
-        // excludes 'ehcache'
-    }
-    log "error" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
-    checksums true // Whether to verify checksums on resolve
-    legacyResolve true // whether to do a secondary resolve on plugin installation, not advised and here for backwards compatibility
-
+    inherits("global") { }
+    log "warn"
+    checksums true
+    legacyResolve false
     repositories {
-        inherits true // Whether to inherit repository definitions from plugins
-
+        inherits true
         grailsPlugins()
         grailsHome()
         grailsCentral()
         mavenLocal()
         mavenCentral()
         mavenRepo "http://download.java.net/maven/2/"
+        mavenRepo "http://developer.ja-sig.org/maven2"
     }
 
-    dependencies { }
+    dependencies {
+        compile('org.springframework.security:spring-security-cas-client:3.0.8.RELEASE') {
+            transitive = false
+        }
+        compile('org.jasig.cas:cas-client-core:3.1.10') {
+            transitive = false
+        }
+        compile('org.opensaml:opensaml:1.1') {
+            transitive = false
+        }
+        compile('xml-security:xmlsec:1.3.0') {
+            transitive = false
+        }
+    }
 
     plugins {
         runtime ":jquery:1.8.3"

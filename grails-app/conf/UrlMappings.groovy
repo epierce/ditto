@@ -1,13 +1,12 @@
 class UrlMappings {
 
 	static mappings = {
-		
-		/* 
-		 * Pages without controller 
+		/*
+		 * Pages without controller
 		 */
 		"/"				(controller:"token", view:"index")
-		
-		/* 
+
+		/*
 		 * Pages with controller
 		 * WARN: No domain/controller should be named "api" or "mobile" or "web"!
 		 */
@@ -21,9 +20,9 @@ class UrlMappings {
 				controller(matches:/^((?!(api|mobile|web)).*)$/)
 		  	}
 		}
-		
-		/* 
-		 * System Pages without controller 
+
+		/*
+		 * System Pages without controller
 		 */
 		"403"	(view:'/_errors/403')
 		"404"	(view:'/_errors/404')

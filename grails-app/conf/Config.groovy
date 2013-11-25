@@ -1,11 +1,7 @@
-// if (System.properties["${appName}.config.location"]) {
-//    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
-// }
-
 grails.config.locations = ["file:/usr/local/etc/grails/${appName}.groovy"]
 
-grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
-grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
+grails.project.groupId = appName
+grails.mime.file.extensions = true
 grails.mime.use.accept.header = false
 grails.mime.types = [
     all:           '*/*',
@@ -46,16 +42,12 @@ grails.web.disable.multipart=false
 // request parameters to mask when logging exceptions
 grails.exceptionresolver.params.exclude = ['password']
 
-// configure auto-caching of queries by default (if false you can cache individual queries with 'cache: true')
-grails.hibernate.cache.queries = false
-
 environments {
     development {
         grails.logging.jul.usebridge = true
     }
     production {
         grails.logging.jul.usebridge = false
-        // TODO: grails.serverURL = "http://www.changeme.com"
     }
 }
 
@@ -93,6 +85,21 @@ log4j = { root ->
 
 grails.config.defaults.locations = [KickstartResources]
 
+/** RESTful CAS client configuration*/
+rest.https.truststore.path = 'resources/certs/rest_client_keystore.jks'
+rest.https.keystore.path= 'resources/certs/rest_client_keystore.jks'
+/** Certificate Hostname Verifier configuration key */
+rest.https.cert.hostnameVerifier = 'ALLOW_ALL'
+
+/** CAS server that autheticates the webservice **/
+casRestClient.cas.server = "https://authtest.it.usf.edu"
+casRestClient.cas.ticketsPath = "/v1/tickets"
+/** Username/password to use when accessing webservice **/
+casRestClient.cas.username = "user"
+casRestClient.cas.password = "secret"
+/** URL of the Webservice to call **/
+directory.nams.search.url = "https://dev.it.usf.edu/vip/services/ws_convert"
+
 ditto.user.usernameAttribute = 'uid'
 //Attributes to copy
 ditto.user.attributes = ["cn","edupersonaffiliation","edupersonentitlement","edupersonprimaryaffiliation",
@@ -102,7 +109,7 @@ ditto.user.attributes = ["cn","edupersonaffiliation","edupersonentitlement","edu
       "usfeduunumber"]
 //Map attribute name to CAS attributes
 ditto.user.attributeMapping = [
-      "cn":"CommonName", 
+      "cn":"CommonName",
       "edupersonaffiliation":"eduPersonAffiliation",
       "edupersonentitlement":"eduPersonEntitlement",
       "edupersonprimaryaffiliation":"eduPersonPrimaryAffiliation",
@@ -121,7 +128,8 @@ ditto.user.attributeMapping = [
       "usfeduprimaryaffiliation":"USFeduPrimaryAffiliation",
       "usfeduprimarycollege":"USFeduPrimaryCollege",
       "usfeduprimarydepartment":"USFeduPrimaryDepartment",
-      "usfeduprivacy":"USFeduPrivacy"
+      "usfeduprivacy":"USFeduPrivacy",
+      "usfeduunumber":"USFeduUnumber"
 ]
 
 //Keys to encypt the tokens with
@@ -143,29 +151,11 @@ ditto.cas.serviceUrls = [
   production:'https://www.example.edu/myService'
 ]
 
-// spring-security-cas-usf settings
-grails.plugins.springsecurity.userLookup.userDomainClassName = 'edu.usf.cims.UsfCasUser'
-grails.plugins.springsecurity.cas.active = true
-grails.plugins.springsecurity.cas.sendRenew = false
-grails.plugins.springsecurity.cas.key = '36b54490b63b916b3b931c36295d5d2e' //unique value for each app
-grails.plugins.springsecurity.cas.artifactParameter = 'ticket'
-grails.plugins.springsecurity.cas.serviceParameter = 'service'
-grails.plugins.springsecurity.cas.filterProcessesUrl = '/j_spring_cas_security_check'
-grails.plugins.springsecurity.cas.proxyCallbackUrl = 'http://localhost:8080/ditto/secure/receptor' 
-grails.plugins.springsecurity.cas.proxyReceptorUrl = '/secure/receptor'
-grails.plugins.springsecurity.cas.useSingleSignout = false
-grails.plugins.springsecurity.cas.driftTolerance = 120000
-grails.plugins.springsecurity.cas.loginUri = '/login'
-grails.plugins.springsecurity.cas.useSamlValidator = true
-grails.plugins.springsecurity.cas.authorityAttribute = 'eduPersonEntitlement'
-grails.plugins.springsecurity.cas.serverUrlPrefix = 'https://authtest.it.usf.edu'
-grails.plugins.springsecurity.cas.serviceUrl = 'http://localhost:8080/ditto/j_spring_cas_security_check'
-
 /** Access Control via Spring Security Roles **/
 ditto.roles.user = 'ROLE_DITTOUSER'
-ditto.roles.admin = [ 
+ditto.roles.admin = [
   dev:'ROLE_DITTO_DEV',
-  test:'ROLE_DITTO_TEST', 
+  test:'ROLE_DITTO_TEST',
   production:'ROLE_DITTO_PROD'
 ]
 
@@ -178,24 +168,7 @@ grails.plugins.springsecurity.interceptUrlMap = [
   '/**':           [ditto.roles.user, 'IS_AUTHENTICATED_FULLY']
 ]
 
-/** RESTful CAS client configuration*/
-rest.https.truststore.path = 'resources/certs/rest_client_keystore.jks'
-rest.https.keystore.path='resources/certs/rest_client_keystore.jks'
-/** Certificate Hostname Verifier configuration key */
-rest.https.cert.hostnameVerifier = 'ALLOW_ALL'
-/** Enforce SSL Socket Factory */
-//rest.https.sslSocketFactory.enforce = true
-/** CAS server that autheticates the webservice **/
-casRestClient.cas.server = "https://authtest.it.usf.edu"
-casRestClient.cas.ticketsPath = "/v1/tickets"        
-/** Username/password to use when accessing webservice **/
-casRestClient.cas.username = "user"    
-casRestClient.cas.password = "secret"
-/** URL of the Webservice to call**/
-directory.nams.search.url = "https://dev.it.usf.edu/vip/services/ws_convert"
-
 /** Email Notifications **/
-//Send notifications to these addresses
 ditto.notification.lists = [
   dev:[],
   test:['ditto-audit@example.edu'],
@@ -220,3 +193,21 @@ grails {
   }
 }
 */
+
+// spring-security-cas-usf settings
+grails.plugins.springsecurity.userLookup.userDomainClassName = 'edu.usf.cims.UsfCasUser'
+grails.plugins.springsecurity.cas.active = true
+grails.plugins.springsecurity.cas.sendRenew = false
+grails.plugins.springsecurity.cas.key = '36b54490b63b916b3b931c36295d5d2e' //unique value for each app
+grails.plugins.springsecurity.cas.artifactParameter = 'ticket'
+grails.plugins.springsecurity.cas.serviceParameter = 'service'
+grails.plugins.springsecurity.cas.filterProcessesUrl = '/j_spring_cas_security_check'
+grails.plugins.springsecurity.cas.proxyCallbackUrl = 'http://localhost:8080/ditto/secure/receptor'
+grails.plugins.springsecurity.cas.proxyReceptorUrl = '/secure/receptor'
+grails.plugins.springsecurity.cas.useSingleSignout = false
+grails.plugins.springsecurity.cas.driftTolerance = 120000
+grails.plugins.springsecurity.cas.loginUri = '/login'
+grails.plugins.springsecurity.cas.useSamlValidator = true
+grails.plugins.springsecurity.cas.authorityAttribute = 'eduPersonEntitlement'
+grails.plugins.springsecurity.cas.serverUrlPrefix = 'https://authtest.it.usf.edu'
+grails.plugins.springsecurity.cas.serviceUrl = 'http://localhost:8080/ditto/j_spring_cas_security_check'
