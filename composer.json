@@ -1,0 +1,35 @@
+{
+    "name": "usf-it/slim-skeleton",
+    "description": "A Slim Framework 3.0 skeleton application for rapid development",
+    "keywords": ["microframework","rest","router"],
+    "homepage": "http://github.com/USF-IT/slim-skeleton",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Eric Pierce",
+            "email": "epierce@usf.edu"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=7.0.0",
+        "slim/slim": "3.*",
+        "slim/twig-view": "2.*",
+        "usf-it/usf-auth": "^0.6.0",
+        "usf-it/usf-idm-common": "^0.5.0",
+        "akrabat/rka-ip-address-middleware": "^0.4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "@stable",
+        "squizlabs/php_codesniffer": "*",
+        "codecontrol/phpunit-helper": "*",
+        "php-vcr/php-vcr": "^1.2",
+        "php-vcr/phpunit-testlistener-vcr": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "USF\\IdM\\SlimSkeleton\\": "app/src/"
+        }
+    }
+}

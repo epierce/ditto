@@ -1,0 +1,104 @@
+# Slim Configuration
+slimSettings:
+  displayErrorDetails: true
+  logger:
+    path: /tmp/PeopleSoftAuthenticator-phpunit.log
+    name: PeopleSoftAuthenticator
+  # Use Twig for templating
+  view:
+    template_path: templates
+    twig:
+      cache: cache
+      debug: false
+      # Rebuild views whenever they change
+      auto_reload: true
+      # Auto escape HTML data
+      autoescape: true
+      # Ignore invalid variables instead of throwing an exception
+      strict_variables: false
+  authentication:
+    # Use CAS for authentication
+    cas:
+      environment: development
+    # AuthN/AuthZ Map -- List URL patterns from most to least specific
+    interceptUrlMap:
+      GET:
+        '/health_check': # Health check is allowed without authentication
+          authN: permitAll
+          authZ: permitAll
+        '^.*': # Use RegEx to match all URLs
+          authN: CAS
+          authZ: # Allow the following eduPersonEntitlements to access this app
+            - 'usf:staff'
+            - 'usf:faculty'
+            - 'usf:tampa:information_technology'
+      POST:
+        '/**': # Use an Ant Pattern
+          authN: denyAll
+          authZ: denyAll
+      PUT:
+        '/**':
+          authN: denyAll
+          authZ: denyAll
+      DELETE:
+        '/**':
+          authN: denyAll
+          authZ: denyAll
+  defaultInstance: phpunit
+  nams:
+    host: dev.example.edu
+    restCasClient:
+      cas_host: https://cas.example.edu
+      cas_user: myUser
+      cas_password: 'SECRET'
+      ticket_storage: '/tmp/PeopleSoftAuthenticator_TGT.json'
+  accountTypes:
+    SelfService: PeopleSoftSS
+    GEMS: PeopleSoftHR
+    FAST: PeopleSoftFM
+  instances:
+    phpunit:
+      GEMS:
+        encryptionKey: 1234567890123456
+        encryptionBlockType: CBC
+        host: gems.example.edu
+        appPath: /psp/gemsdvlp-portal/
+        port: 443
+        deepLinkPath: EMPLOYEE/HRMS/c/
+      SelfService:
+        encryptionKey: 1234567890123456
+        encryptionBlockType: CBC
+        host: gems.example.edu
+        appPath: /psp/gemsdvlp-portal/
+        port: 8443
+        deepLinkPath: EMPLOYEE/HRMS/c/
+      FAST:
+        encryptionKey: 1234567890123456
+        encryptionBlockType: CBC
+        host: fast.example.edu
+        appPath: /psp/fastdvlp-portal/
+        port: 443
+        deepLinkPath: EMPLOYEE/HRMS/c/
+    alternate:
+      GEMS:
+        encryptionKey: 0123456123456789
+        encryptionBlockType: CBC
+        host: alt.gems.example.edu
+        appPath: /psp/gemsdvlp-portal/
+        port: 443
+        deepLinkPath: EMPLOYEE/HRMS/c/
+      SelfService:
+        encryptionKey: 0123456123456789
+        encryptionBlockType: CBC
+        host: alt.gems.example.edu
+        appPath: /psp/gemsdvlp-portal/
+        port: 443
+        deepLinkPath: EMPLOYEE/HRMS/c/
+        allowMultipleAccounts: true
+      FAST:
+        encryptionKey: 0123456123456789
+        encryptionBlockType: CBC
+        host: alt.fast.example.edu
+        appPath: /psp/fastdvlp-portal/
+        port: 443
+        deepLinkPath: EMPLOYEE/HRMS/c/

@@ -1,0 +1,42 @@
+{% include 'include/header.html' %}
+
+<div class="row">
+    <div class="col-md-6">
+        <h1>&nbsp;</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        <fieldset>
+            <legend>Search for an existing user</legend>
+        <div class="input-group">
+            <div class="input-group-btn">
+                <button type="button" id="dLabel" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tabindex="2">Search by <span class="caret"></span></button>
+                <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="dLabel" role="menu">
+                    <li><a class="dropdown-item" href="javascript:setIdentifierType('name','Name');">Name</a></li>
+                    <li><a class="dropdown-item" href="javascript:setIdentifierType('netid','NetID');">NetID</a></li>
+                    <li><a class="dropdown-item" href="javascript:setIdentifierType('mail','USF Email');">USF Email</a></li>
+                    <li><a class="dropdown-item" href="javascript:setIdentifierType('usfid','Unumber');">Unumber</a></li>
+                    <li><a class="dropdown-item" href="javascript:setIdentifierType('emplid','Employee ID');">Employee ID</a></li>
+                </ul>
+            </div>
+            <input type="text" class="form-control input-lg" id="searchTerm" name="searchTerm" tabindex="1" aria-label="Search for user with this identifier." value="" autofocus>
+            <span class="input-group-btn">
+                <button class="btn btn-primary btn-lg has-spinner" id="searchSubmitButton" tabindex="3">Go! <span class="spinner"><i class="fa fa-spinner fa-spin"></i></span></button>
+            </span>
+        </div>
+        <input id="identifierType" type="hidden" value="">
+            </fieldset>
+    </div>
+    <div class="col-md-3 col-md-offset-1">
+        <legend>Create a new user</legend>
+        <a href="/ditto/personSearch/index" class="btn btn-primary btn-lg btn-block">Set Attributes</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <h1>&nbsp;</h1>
+    </div>
+</div>
+
+{% include 'include/footer.html' %}

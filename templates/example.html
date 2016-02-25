@@ -1,0 +1,43 @@
+{% include 'include/header.html' %}
+
+
+    <!--
+        <div class="page-header pull-right">
+            <h1>{{ username }} <span class="badge">{{ eppa|capitalize }}</span></h1>
+        </div>
+    -->
+
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                This page displays placeholder data and images pulled from a public testing webservice: <a href="http://jsonplaceholder.typicode.com/">JSONPlaceholder</a>.
+                To change the album being displayed, add <strong><em>/number</em></strong> to the URL for this page or use the <strong><em>?album=number</em></strong> query parameter.  Any number between 1 and 100 is valid.
+            </p>
+        </div>
+    </div>
+    <br>
+    <div class="page-header">
+        <h1>Album {{ data[0].albumId }}</h1>
+    </div>
+    {% for entry in data %}
+
+        {%if (loop.index % 5) == 0 %}
+            <div class="row">
+        {% endif %}
+
+            <div class="col-md-2">
+                <p>
+                    <img data-src="{{ entry.thumbnailUrl}}" class="img-thumbnail" alt="{{ entry.title }}" src="{{ entry.thumbnailUrl}}" data-holder-rendered="true">
+                </p>
+            </div>
+
+        {%if ((loop.index % 5) == 0) or loop.last %}
+            </div>
+        {% endif %}
+    {% endfor %}
+
+
+<br>
+        {{ dump(data) }}
+
+{% include 'include/footer.html' %}

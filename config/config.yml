@@ -1,0 +1,49 @@
+# Slim Configuration
+slimSettings:
+  # Display error messages to the user when an exception is thrown
+  displayErrorDetails: true
+  # Use Monolog for logging
+  logger:
+    path: ../logs/application.log
+    name: slimSkeleton
+    level: info
+  # Use Twig for templating
+  view:
+    template_path: ../templates
+    twig:
+      cache: ../cache
+      debug: true
+      # Rebuild views whenever they change
+      auto_reload: true
+      # Auto escape HTML data
+      autoescape: true
+      # Ignore invalid variables instead of throwing an exception
+      strict_variables: false
+  authentication:
+    # Use CAS for authentication
+    cas:
+      environment: development
+    # AuthN/AuthZ Map
+    interceptUrlMap:
+      GET:
+        '/health_check': # Health check is allowed without authentication
+          authN: permitAll
+          authZ: permitAll
+        '/**': # All other pages require CAS
+          authN: CAS
+          authZ: permitAll
+        '/': # Allow the home page without authentication
+          authN: permitAll
+          authZ: permitAll
+      POST:
+        '/**':
+          authN: CAS
+          authZ: permitAll
+      PUT:
+        '/**':
+          authN: denyAll
+          authZ: denyAll
+      DELETE:
+        '/**':
+          authN: denyAll
+          authZ: denyAll
