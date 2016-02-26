@@ -1,0 +1,66 @@
+.search-results-panel {
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+.search-results-form-group {
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+.main-navigation li a {
+    text-decoration: none;
+}
+
+.main-navigation li a:hover {
+    text-decoration: none;
+    color: #FFF;
+}
+
+.service-desc {
+  margin-left: 15px;
+}
+
+.xtra_vert_space {
+  margin-bottom: 15px;
+}
+
+.spinner {
+  display: inline-block;
+  opacity: 0;
+  width: 0;
+
+  -webkit-transition: opacity 0.25s, width 0.25s;
+  -moz-transition: opacity 0.25s, width 0.25s;
+  -o-transition: opacity 0.25s, width 0.25s;
+  transition: opacity 0.25s, width 0.25s;
+}
+
+.has-spinner.active {
+  cursor:progress;
+}
+
+.has-spinner.active .spinner {
+  opacity: 1;
+  width: auto; /* This doesn't work, just fix for unkown width elements */
+}
+
+.has-spinner.btn-mini.active .spinner {
+  width: 10px;
+}
+
+.has-spinner.btn-small.active .spinner {
+  width: 13px;
+}
+
+.has-spinner.btn.active .spinner {
+  margin-left: -5px;
+  padding-left: 5px;
+  width: 20px;
+}
+
+.btn {
+  font-weight: normal !important;
+  color: #FFFFFF !important;
+}
+
