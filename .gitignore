@@ -2,6 +2,7 @@
 vendor/
 node_modules/
 .idea/
+public/assets/
 cache/*
 !cache/README.md
 config/*.local.yml
@@ -10,11 +11,3 @@ coverage/*
 logs/*
 !logs/README.md
 composer.lock
-public/assets/fonts/*
-!public/assets/fonts/README.md
-public/assets/images/*
-!public/assets/images/README.md
-public/assets/javascript/*
-!public/assets/javascript/README.md
-public/assets/stylesheets/*
-!public/assets/stylesheets/README.md

@@ -72,32 +72,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-        sass: {
-            dist: {
-                options: {
-                    style: 'compressed'
-                },
-                files: {
-                    '<%= appConfig.assetTgt %>/stylesheets/main.css':'<%= appConfig.assetSrc %>/stylesheets/styles.scss'
-                }
-            }
-        },
-        copy: {
-            main: {
-                files: [
-                    {
-                        expand: true,
-                        flatten: true,
-                        src: [
-                            'node_modules/bootstrap/dist/fonts/**',
-                            'node_modules/font-awesome/fonts/**'
-                        ],
-                        dest: '<%= appConfig.assetTgt %>/fonts',
-                        filter: 'isFile'
-                    }
-                ]
-            }
-        },
         imagemin: {
             images: {
                 options: {
@@ -115,11 +89,28 @@ module.exports = function(grunt) {
         },
         concat: {
             options: {
-                separator: ';'
+                separator: ';\n'
             },
-            main_js: {
-                src: ['<%= appConfig.assetSrc %>/javascript/main.js'],
+            js: {
+                src: ['<%= appConfig.assetSrc %>/javascript/main.js', '<%= appConfig.assetSrc %>/javascript/functions.js'],
                 dest: '<%= appConfig.assetTgt %>/javascript/main.js'
+            },
+            css: {
+                src: [
+                    '<%= appConfig.assetSrc %>/stylesheets/styles.css'
+                ],
+                dest: '<%= appConfig.assetTgt %>/stylesheets/main.css'
+            }
+        },
+        cssmin: {
+            main: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= appConfig.assetTgt %>/stylesheets',
+                    src: ['main.css'],
+                    dest: '<%= appConfig.assetTgt %>/stylesheets',
+                    ext: '.min.css'
+                }]
             }
         },
         uglify: {
@@ -128,7 +119,7 @@ module.exports = function(grunt) {
             },
             main_js: {
                 files: {
-                    '<%= appConfig.assetTgt %>/javascript/main.js': '<%= appConfig.assetTgt %>/javascript/main.js',
+                    '<%= appConfig.assetTgt %>/javascript/main.min.js': '<%= appConfig.assetTgt %>/javascript/main.js',
                 }
             }
         },
@@ -155,16 +146,6 @@ module.exports = function(grunt) {
                     livereload: true
                 }
             },
-            sass: {
-                files: [
-                    '<%= appConfig.assetSrc %>/stylesheets/*.scss',
-                    '<%= appConfig.assetSrc %>/stylesheets/**/*.scss'
-                ],
-                tasks: ['sass'],
-                options: {
-                    livereload: true
-                }
-            },
             tests: {
                 files: ['<%= appConfig.phpSrc %>/**/*.php'],
                 tasks: ['phpunit']
@@ -174,26 +155,23 @@ module.exports = function(grunt) {
 
     // Task definitions
     grunt.registerTask('default', ['serve']);
-    //grunt.registerTask('clean', ['clean']);
     grunt.registerTask('build', [
         'clean',
         'phpunit',
         'imagemin',
-        'copy',
-        'sass',
         'concat',
+        'cssmin',
         'uglify'
     ]);
     grunt.registerTask('serve', [
         'clean',
         'phpunit',
         'imagemin',
-        'copy',
-        'sass',
         'concat',
+        'cssmin',
         'uglify',
-        'php:dist',         // Start PHP Server
-        'browserSync:dist', // Using the php instance as a proxy
-        'watch'             // Any other watch tasks you want to run
+        'php:dist',
+        'browserSync:dist',
+        'watch'
     ]);
 };
