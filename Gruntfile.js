@@ -11,14 +11,27 @@ module.exports = function(grunt) {
         // Configurable paths for the application
         appConfig: {
             phpSrc: 'app/src',
-            npmAssets: 'node_modules',
             assetSrc: 'assets',
             assetTgt: 'public/assets',
             templates: 'templates',
-            webDir: 'public'
+            webDir: 'public',
+            cacheDir: 'cache',
+            logDir: 'logs'
         },
 
         // Task configuration
+        clean: {
+            options: {
+                "no-write": false,  // Change to true for testing
+                force: true
+            },
+            build: [
+                '<%= appConfig.assetTgt %>/**/*',
+                '<%= appConfig.cacheDir %>/*',
+                '<%= appConfig.logDir %>/*',
+                '!**/README.md'
+            ]
+        },
         php: {
             dist: {
                 options: {
@@ -75,23 +88,34 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        src: ['<%= appConfig.assetSrc %>/fonts/**'],
+                        src: [
+                            'node_modules/bootstrap/dist/fonts/**',
+                            'node_modules/font-awesome/fonts/**'
+                        ],
                         dest: '<%= appConfig.assetTgt %>/fonts',
                         filter: 'isFile'
-                    },
-                    {
-                        expand: true,
-                        flatten: true,
-                        src: ['<%= appConfig.assetSrc %>/images/**'],
-                        dest: '<%= appConfig.assetTgt %>/images',
-                        filter: 'isFile'
-                    },
+                    }
                 ]
+            }
+        },
+        imagemin: {
+            images: {
+                options: {
+                    optimizationLevel: 4,
+                    progressive: true,
+                    interlaced: true
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= appConfig.assetSrc %>/images/',
+                    src: ['**/*.{png,jpg,gif}'],
+                    dest: '<%= appConfig.assetTgt %>/images/'
+                }]
             }
         },
         concat: {
             options: {
-                separator: ';',
+                separator: ';'
             },
             main_js: {
                 src: ['<%= appConfig.assetSrc %>/javascript/main.js'],
@@ -142,23 +166,28 @@ module.exports = function(grunt) {
                 }
             },
             tests: {
-                files: ['<%= appConfig.phpSrc %>/**/*.php'],  //the task will run only when you save files in this location
+                files: ['<%= appConfig.phpSrc %>/**/*.php'],
                 tasks: ['phpunit']
             }
         }
     });
 
-    // Task definition
-    grunt.registerTask('default', ['watch']);
+    // Task definitions
+    grunt.registerTask('default', ['serve']);
+    //grunt.registerTask('clean', ['clean']);
     grunt.registerTask('build', [
+        'clean',
         'phpunit',
+        'imagemin',
         'copy',
         'sass',
         'concat',
         'uglify'
     ]);
     grunt.registerTask('serve', [
+        'clean',
         'phpunit',
+        'imagemin',
         'copy',
         'sass',
         'concat',
